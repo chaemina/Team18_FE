@@ -3,9 +3,11 @@ import { navStructure } from "./navStructure";
 import useLogin from "../components/account/hooks/useLogin";
 import React from "react";
 
-export default function GNB({ data }) {
+export default function GNB({ profileImage }) {
   const { logoutUser } = useLogin();
   const auth = window.localStorage.getItem("isLogin");
+  const defaultProfileUrl =
+    "https://mblogthumb-phinf.pstatic.net/MjAyMDExMDFfMjIg/MDAxNjA0MjI4ODc1MDkx.itxFQbHQ_zAuNQJU7PCOlF0mmstYn2v4ZF4WygunqGIg.3jloNowx-eWU-ztCLACtYubVbATNdCFQLjgvYsynV1og.JPEG.gambasg/유튜브_기본프로필_주황.jpg?type=w400";
   const currentUrl = useLocation()
     .pathname.replace(/\d/g, "")
     .replace(/^\/+|\/+$/g, "");
@@ -46,13 +48,13 @@ export default function GNB({ data }) {
               <div>
                 <img
                   className="w-7 rounded-full"
-                  src={data?.user?.profileImage}
-                  alt="기본 프로필 사진"
+                  src={profileImage || defaultProfileUrl}
+                  alt="profile"
                 ></img>
               </div>
               <Link
                 className="pl-1 pr-2 py-[2px] border-2 border-orange rounded"
-                to={"/watching/videos"}
+                to={"/videos"}
                 onClick={logoutUser}
               >
                 <span className=" flex items-center text-xs text-orange">

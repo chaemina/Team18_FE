@@ -28,7 +28,7 @@ const useLogin = () => {
     window.localStorage.removeItem("uid");
     window.localStorage.removeItem("token");
     window.localStorage.removeItem("expiry");
-    navaigate("/");
+    window.reload();
   };
 
   return { expiry, loginUser, logoutUser };

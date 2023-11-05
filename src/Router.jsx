@@ -25,11 +25,12 @@ import Dashboard from "./pages/mentoring/Dashboard";
 import ChattingRoomsPage from "./pages/chatting/ChattingRoomsPage";
 import ChattingListPage from "./pages/chatting/ChattingListPage";
 import InformationFixPage from "./pages/account/InformationFixPage";
-
+import VideoListPage from "./pages/watching/VideoListPage";
+import VideoDetailPage from "./pages/watching/VideoDetailPage";
 const router = createBrowserRouter(
   createRoutesFromElements(
     <Route>
-      <Route index element={<Navigate to="watching/videos" />} />
+      <Route index element={<Navigate to="/videos" />} />
 
       <Route element={<AccountLayout />}>
         <Route path="/users/login" element={<LoginPage />} />
@@ -38,8 +39,8 @@ const router = createBrowserRouter(
 
       {/* 공통 레이아웃 */}
       <Route element={<Layout />}>
-        <Route path="watching/videos" element={<h1>Vidoes</h1>} />
-        <Route path="watching/video/:videoId" element={<h1>Video</h1>} />
+        <Route path="videos" element={<VideoListPage />} />
+        <Route path="videos/:videoId" element={<VideoDetailPage />} />
         <Route path="mentoring/posts" element={<Posts />} />
         <Route path="mentoring/post/:postId" element={<Post />} />
         <Route path="chatting/rooms" element={<ChattingListPage />} />
@@ -51,7 +52,7 @@ const router = createBrowserRouter(
 
         {/* 사용자 인증 레이아웃  */}
         <Route element={<AuthCheck />}>
-          <Route path="watching/history" element={<h1>History</h1>} />
+          <Route path="videos/history" element={<h1>History</h1>} />
           <Route element={<MentorCheck />}>
             <Route path="mentoring/write" element={<Write />} />
             <Route path="mentoring/edit/:postId" element={<Edit />} />
