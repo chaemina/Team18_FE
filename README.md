@@ -31,7 +31,7 @@
 
 #### 🎈 Instance address
 
-- FE 배포 주소 : https://k2d5076fbf9a5a.user-app.krampoline.com/videos
+- FE 배포 주소 : https://ke94a9914479ca.user-app.krampoline.com/videos
 
 #### 🎨 ERD
 
@@ -47,8 +47,10 @@
 
 ### 🚀 How to start?
 
-`npm install`
-`npm run dev`
+```
+npm install
+npm run dev
+```
 
 ### 🤖 Technology stack
 
@@ -104,12 +106,15 @@ Reason why
 ### 💡 Main function
 
 #### 사용자 계정
+![image](https://github.com/Step3-kakao-tech-campus/Team18_FE/assets/71962076/1c80b8f7-ae82-493d-aeba-8943bd5fd1f1)
 
 - 회원가입, 로그인 기능 구현
 - 회원 가입 시 관심사, 국가, 멘토/멘티 선택
 - 마이페이지 프로필, 개인정보조회, 수정 기능 구현
 
 #### 영상 시청 서비스
+![image](https://github.com/Step3-kakao-tech-campus/Team18_FE/assets/71962076/8fd660e2-ae73-4552-9672-9a1c9e9978c4)
+![image](https://github.com/Step3-kakao-tech-campus/Team18_FE/assets/71962076/cbc9b52d-e82e-4e7f-9e4f-d337e6bdcfca)
 
 - 카테고리 별 영상 정보 무한 스크롤로 구현
 - 로그인 시 사용자의 관심사 기반 추천 영상 정보 제공
@@ -117,6 +122,7 @@ Reason why
 - 최근 시청한 10개의 영상 보관함 제공
 
 #### 멘토링 서비스
+![image](https://github.com/Step3-kakao-tech-campus/Team18_FE/assets/71962076/ac72c994-92f9-4399-b0e7-03fb6ec47675)
 
 - 목록 페이지
   - 무한 스크롤 방식으로 멘토링 목록 제공
@@ -131,6 +137,8 @@ Reason why
   - 모달을 통해 상대 멘토/멘티 프로필 제공
 
 #### 채팅 서비스
+![image](https://github.com/Step3-kakao-tech-campus/Team18_FE/assets/71962076/d1b13707-6161-4cb2-b51a-c6557ee2d14a)
+![image](https://github.com/Step3-kakao-tech-campus/Team18_FE/assets/71962076/205fc551-26cc-4a8f-a852-168c4d0188cf)
 
 - Public/My 채널 리스트 확인
 - 카테고리 및 서브 카테고리 검색 가능
