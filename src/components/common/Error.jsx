@@ -1,9 +1,21 @@
-export default function Error({ errorMessage = "" }) {
+import Button from "./Button";
+
+export default function Error({ resetErrorBoundary, errorMessage }) {
+  const handleRefreshClick = () => {
+    if (resetErrorBoundary) resetErrorBoundary();
+    else window.location.reload();
+  };
+
   return (
-    <div className="text-center space-y-2">
-      <p className="text-3xl">Something&apos;s Wrong!</p>
-      <p className="text-xl">Please Refresh</p>
-      <pre className="bg-gray-200 text-red-500">{errorMessage}</pre>
+    <div className="text-center text-green-700 space-y-2">
+      <p className="text-2xl font-bold">Sorry, Something went Wrong!</p>
+      <p className="pb-4 text-xl">{errorMessage}</p>
+      <div className="flex justify-center items-center space-x-2">
+        <span className="font-bold">Please click </span>
+        <Button color="orange" size="sm" onClick={handleRefreshClick}>
+          Refresh
+        </Button>
+      </div>
     </div>
   );
 }

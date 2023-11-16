@@ -1,24 +1,24 @@
 import React, { useState, useEffect } from "react";
 import ReactPlayer from "react-player/youtube";
 
-const Video = ({ data, languages }) => {
+const Video = ({ video, languages }) => {
   const [player, setPlayer] = useState(null);
   const [currentSubtitle, setCurrentSubtitle] = useState("");
 
   const findSubtitle = (currentTime) => {
-    return data.subtitles.find((sub) => {
-      const start = parseFloat(sub.subtitleStartTime);
-      const end = parseFloat(sub.subtitleEndTime);
+    return video.subtitles.find((sub) => {
+      const start = parseFloat(sub.korSubtitleStartTime);
+      const end = parseFloat(sub.korSubtitleEndTime);
       return currentTime >= start && currentTime <= end;
     });
   };
 
   const handleProgress = ({ playedSeconds }) => {
     if (playedSeconds !== null && playedSeconds !== undefined) {
-      const currentTime = playedSeconds.toFixed();
+      const currentTime = parseFloat(playedSeconds);
 
-      if (currentTime > data.endTime) {
-        player.seekTo(data.startTime, "seconds");
+      if (currentTime > parseFloat(video.endTime)) {
+        player.seekTo(parseFloat(video.startTime), "seconds");
       }
 
       const subtitle = findSubtitle(currentTime);
@@ -44,14 +44,14 @@ const Video = ({ data, languages }) => {
     }, 1000);
 
     return () => clearInterval(interval);
-  }, [player, data.subtitles, languages]);
+  }, [player, video.subtitles, languages]);
 
   return (
     <>
       <ReactPlayer
         ref={setPlayer}
         className="max-w-[100%]"
-        url={data.url + `?start=${data.startTime}`}
+        url={video.url + `?start=${video.startTime}`}
         playing={true}
         controls={true}
         onProgress={handleProgress}

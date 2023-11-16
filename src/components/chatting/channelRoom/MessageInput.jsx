@@ -5,7 +5,9 @@ import { addMessageText } from "../../../apis/chatting/talkplus";
 
 const MessageInput = ({ channelId }) => {
   const queryClient = useQueryClient();
+
   const [newMessage, setNewMessage] = useState("");
+
   const { mutate: sendMessageMutate } = useMutation(
     () => addMessageText(channelId, newMessage),
     {

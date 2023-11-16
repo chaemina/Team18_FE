@@ -10,7 +10,10 @@ const VideoDetailPage = () => {
       <Suspense fallback={<Loader />}>
         <ErrorBoundary
           FallbackComponent={(props) => (
-            <Error errorMessage={props.error.message} />
+            <Error
+              error={props.error?.response?.status}
+              errorMessage={props.error.message}
+            />
           )}
         >
           <VideoDetailtemplate />

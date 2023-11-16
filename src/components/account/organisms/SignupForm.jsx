@@ -11,6 +11,8 @@ import SelectTag from "../atoms/SelectTag";
 import { useNavigate } from "react-router-dom";
 import { nameToCode } from "../../../utils/account/country";
 import Title from "../atoms/Title";
+import Toast from "../../common/Toast";
+import ToastError from "../../common/ToastError";
 
 const SignupForm = ({ inputProps }) => {
   const navigate = useNavigate();
@@ -22,14 +24,18 @@ const SignupForm = ({ inputProps }) => {
   const phone = watch("phone");
   const password = watch("password");
   const passwordCheck = watch("passwordcheck");
-  const age = watch("age");
+  const birthDate = watch("birthDate");
+  const [message, setMessage] = useState("");
+  const [severity, setSeverity] = useState("");
+  const [openToastError, setOpenToastError] = useState(false);
+  const [toastErrorMessage, setToastErrorMessage] = useState("");
 
   const [country, setCountry] = useState("United States");
 
   const handleOptionChange = (country) => {
     setCountry(country);
   };
-  const [role, setRole] = useState("Mentor");
+  const [role, setRole] = useState("MENTOR");
 
   const handleRoleChange = (event) => {
     setRole(event.target.value);
@@ -41,17 +47,37 @@ const SignupForm = ({ inputProps }) => {
     setCategoryList(newCategoryList);
   };
 
-  const handleEmailConfirm = async () => {
-    const response = await emailCheck({ email: email });
-    if (response.data.success === false) {
-      setError(
-        "email",
-        { message: "User using this email already exists" },
-        { shouldFocus: true }
-      );
-      return false;
-    } else {
+  const [open, setOpen] = useState(false);
+
+  const handleClose = (event, reason) => {
+    if (reason !== "clickaway") {
+      setOpenToastError(false);
+      setOpen(false);
+    }
+  };
+
+  const handleOk = (event, reason) => {
+    if (reason !== "clickaway") {
+      setOpen(false);
+      navigate("/");
+    }
+  };
+  const handleEmailConfirm = async (email) => {
+    try {
+      const response = await emailCheck(email);
+
+      console.log("Response:", response);
       return true;
+    } catch (error) {
+      if (error?.response?.data?.status === "fail") {
+        setError(
+          "email",
+          { message: "User using this email already exists" },
+          { shouldFocus: true }
+        );
+        return false;
+      }
+      return false;
     }
   };
 
@@ -74,14 +100,14 @@ const SignupForm = ({ inputProps }) => {
   const onSubmit = async () => {
     try {
       //email과 password 값 유효 먼저 체크
-      const emailIsValid = await handleEmailConfirm(); //
-      const passwordIsValid = await handlePasswordConfirm();
+      const emailIsValid = await handleEmailConfirm(email);
+      const passwordIsValid = await handlePasswordConfirm(password);
 
       if (emailIsValid && passwordIsValid) {
         // age format 생년월일 문자열로 변환하여 전달
         let birth = null;
-        if (age && age.$d) {
-          birth = age.format("YYYY-MM-DD");
+        if (birthDate && birthDate.$d) {
+          birth = birthDate.format("YYYY-MM-DD");
         }
 
         const response = await register({
@@ -91,29 +117,45 @@ const SignupForm = ({ inputProps }) => {
           password: password,
           role: role,
           country: nameToCode(country),
-          age: birth,
+          birthDate: birth,
           categoryList: categoryList,
           phone: phone,
           introduction: null,
           profileImage: null,
         });
 
-        if (response.data.success === true) {
+        if (response?.data?.status === "success") {
           // 성공적으로 회원가입한 경우 메인 페이지로 이동
-          alert("정상적으로 회원가입 되었습니다.");
-          navigate("/");
+          setOpen(true);
+          setMessage("Sign up Success");
+          setSeverity("success");
+          setTimeout(() => {
+            handleOk();
+          }, 2000);
         } else {
           // 회원 가입 실패
-          console.error("sign up failed");
+          setOpenToastError(true);
+          setToastErrorMessage("Sign up failed");
+          console.error("sign up failed", error);
         }
       } else {
-        console.error("email is not valid");
+        // email과 password 검사 실패
+        setOpenToastError(true);
+        setToastErrorMessage("Sign up failed");
+        console.log(error);
       }
     } catch (error) {
-      // 에러 처리
-      console.error(error);
-      // 회원 가입 요청 실패
-      console.error("register request failed");
+      // setOpen(true);
+      // setMessage("Sign up failed");
+      // setSeverity("error");
+      setOpenToastError(true);
+      setToastErrorMessage(error?.response?.data?.message || "Sign up failed");
+      const errors = error?.response?.data?.data;
+      Object.entries(errors).forEach(([key, message]) => {
+        console.log(`${key}: ${message}`);
+      });
+
+      console.error("register request failed", error);
     }
   };
 
@@ -163,34 +205,34 @@ const SignupForm = ({ inputProps }) => {
               )
               .map(renderController)}
             <Controller
-              name="age"
+              name="birthDate"
               control={methods.control}
               render={(field) => (
                 <BasicDatePicker
                   {...field}
                   control={methods.control}
-                  name="age"
-                  value={age}
+                  name="birthDate"
+                  value={birthDate}
                 />
               )}
             />
             <RadioButton
               name="role"
-              value="Mentor"
+              value="MENTOR"
               type="radio"
-              checked={role === "Mentor"}
+              checked={role === "MENTOR"}
               onChange={handleRoleChange}
-              inputProps={{ "aria-label": "Mentor" }}
+              inputProps={{ "aria-label": "MENTOR" }}
             >
               Mentor
             </RadioButton>
             <RadioButton
               name="role"
-              value="Mentee"
+              value="MENTEE"
               type="radio"
-              checked={role === "Mentee"}
+              checked={role === "MENTEE"}
               onChange={handleRoleChange}
-              inputProps={{ "aria-label": "Mentee" }}
+              inputProps={{ "aria-label": "MENTEE" }}
             >
               Mentee
             </RadioButton>
@@ -215,6 +257,20 @@ const SignupForm = ({ inputProps }) => {
           </div>
         </form>
       </FormProvider>
+      {openToastError && (
+        <ToastError
+          open={openToastError}
+          handleClose={handleClose}
+          errorMessage={toastErrorMessage}
+        />
+      )}
+      <Toast
+        open={open}
+        handleClose={handleClose}
+        severity={severity}
+        message={message}
+        autoHideDuration={3000}
+      />
     </>
   );
 };

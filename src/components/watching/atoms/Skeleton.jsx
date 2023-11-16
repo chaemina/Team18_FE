@@ -2,7 +2,7 @@ import React from "react";
 import { Skeleton } from "@mui/material";
 import Grid from "../atoms/Grid";
 
-const VideoSkeleton = () => {
+const VideoSkeleton = ({ className }) => {
   return (
     <Grid className="animate-pulse space-x-4">
       {Array.from(new Array(4)).map((_, index) => (
@@ -21,6 +21,7 @@ const VideoSkeleton = () => {
             justifyContent: "center",
             alignItems: "center",
             padding: "20px",
+            className: className,
           }}
         />
       ))}

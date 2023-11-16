@@ -10,8 +10,8 @@ const VideoListPage = () => {
   const [loading, setLoading] = useState(true);
 
   useEffect(() => {
-    const storedToken = window.localStorage.getItem("token");
-    setToken(storedToken);
+    const token = window.localStorage.getItem("token");
+    setToken(token);
     setLoading(false);
   }, []);
 
@@ -23,19 +23,22 @@ const VideoListPage = () => {
     <Suspense fallback={<Loader />}>
       <ErrorBoundary
         FallbackComponent={(props) => (
-          <Error errorMessage={props.error.message} />
+          <Error
+            error={props.error?.response?.status}
+            errorMessage={props.error.message}
+          />
         )}
       >
         {token !== null ? (
           <>
-            <div className="w-full flex flex-col justify-center items-center mt-20">
+            <div className="w-full flex flex-col justify-center items-center">
               <UserVideoList />
               <VideoList />
             </div>
           </>
         ) : (
           <>
-            <div className="w-full flex flex-col justify-center items-center mt-20">
+            <div className="w-full flex flex-col justify-center items-center ">
               <VideoList />
             </div>
           </>

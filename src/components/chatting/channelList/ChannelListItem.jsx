@@ -17,9 +17,6 @@ const ChannelListItem = ({ data }) => {
         <span className="text-gray-700 text-sm text-ellipsis">
           {detail?.content ? detail.content : ""}
         </span>
-        <section>
-          {detail?.tag && detail.tag.map((t) => <span key={t}>{t}</span>)}
-        </section>
       </div>
     </div>
   );

@@ -8,6 +8,8 @@
   },
   "scripts": {
     "dev": "vite",
+    "start:mac": "HTTPS=true SSL_CRT_FILE=cert/localhost.pem SSL_KEY_FILE=cert/localhost-key.pem npm run dev",
+    "start:windows": "set HTTPS=true&&set SSL_CRT_FILE=cert/localhost.pem&&set SSL_KEY_FILE=cert/localhost-key.pem&&npm run dev",
     "build": "vite build",
     "lint": "eslint . --ext js,jsx --report-unused-disable-directives --max-warnings 0",
     "preview": "vite preview"

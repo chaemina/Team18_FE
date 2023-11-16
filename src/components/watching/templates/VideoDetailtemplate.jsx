@@ -8,28 +8,27 @@ import VideoDetailForm from "../organisms/VideoDetailForm";
 import SideVideoForm from "../organisms/SideVideoForm";
 
 const VideoDetailtemplate = () => {
-  const { videoId } = useParams();
+  const { videoID } = useParams();
   const { data, isError, error, isLoading } = useQuery(
-    ["getDetailVideo", videoId],
-    () => getDetailVideo(videoId),
-    { enabled: !!videoId, suspense: true }
+    ["getDetailVideo", videoID],
+    () => getDetailVideo(videoID),
+    { enabled: !!videoID, suspense: true }
   );
   if (isError) {
-    return <Error errorMessage={error.errorMessage} />;
+    return <Error errorMessage={"This Video does not exist."} />;
   }
   if (isLoading) {
     return <Loader />;
   }
 
-  console.log(data);
   return (
     <>
-      <main className="h-screen flex">
-        <section className="w-3/4 flex justify-center">
+      <main className="h-[620px] flex">
+        <section className="w-3/4 flex justify-center bg-white ">
           <VideoDetailForm data={data} />
         </section>
-        <aside className="w-1/4 bg-white">
-          <SideVideoForm />
+        <aside className="w-1/4 p-2">
+          <SideVideoForm data={data} />
         </aside>
       </main>
     </>

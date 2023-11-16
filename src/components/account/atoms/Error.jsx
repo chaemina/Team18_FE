@@ -1,6 +1,9 @@
 import Button from "../../common/Button";
 
-const Error = ({ errorMessage = "" }) => {
+const Error = ({ error, errorMessage }) => {
+  console.log(error);
+  console.log(errorMessage);
+
   return (
     <main className="mt-20 justify-center items-center flex flex-col">
       <div className="p-10 max-w-[500px] text-center">
@@ -11,7 +14,7 @@ const Error = ({ errorMessage = "" }) => {
         <Button
           color="white"
           size="xl"
-          onClick={() => window.location.reload()}
+          onClick={() => window.location.reload(true)}
         >
           <span className="material-symbols-outlined relative -bottom-1 text-2xl font-bold">
             refresh

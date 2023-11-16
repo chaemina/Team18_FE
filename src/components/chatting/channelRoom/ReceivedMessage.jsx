@@ -25,6 +25,10 @@ const ReceivedMessage = ({ message }) => {
           src={profileImageUrl}
           alt="프로필"
           className="w-10 h-10 rounded-full"
+          onError={(e) => {
+            e.target.src =
+              "https://w7.pngwing.com/pngs/529/816/png-transparent-computer-icons-user-profile-avatar-heroes-monochrome-black.png";
+          }}
         />
       </div>
       <div className="flex flex-col gap-1">

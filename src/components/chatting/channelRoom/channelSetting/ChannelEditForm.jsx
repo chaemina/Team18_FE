@@ -14,6 +14,7 @@ const ChannelEditForm = ({ channelInfo, handleCancel }) => {
     category,
     subcategory,
   });
+
   const { mutate: updateChannelMutate } = useMutation(
     () => updateChannel(channelInfo.id, channelFormData),
     {

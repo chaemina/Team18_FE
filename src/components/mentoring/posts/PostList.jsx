@@ -4,6 +4,7 @@ import { useInfiniteQuery } from "@tanstack/react-query";
 
 import { getPostsReq } from "../../../apis/mentoring/post";
 
+import NotPost from "./NotPost";
 import PostCard from "./PostCard";
 import PostCardSkeletons from "./PostCardSkeletons";
 
@@ -15,7 +16,7 @@ export default function PostList({ category, search }) {
         return getPostsReq(category, search, pageParam);
       },
       getNextPageParam: (lastPage, allPages) => {
-        if (lastPage.data.response.length === 0) return undefined;
+        if (lastPage.data.data.length === 0) return undefined;
         return allPages.length;
       },
     });
@@ -26,12 +27,14 @@ export default function PostList({ category, search }) {
     if (inView && !isLoading && hasNextPage) fetchNextPage();
   }, [inView, isLoading, hasNextPage, fetchNextPage]);
 
-  return (
+  return data.pages[0].data.data.length === 0 ? (
+    <NotPost />
+  ) : (
     <div className="flex flex-col">
       {data.pages
-        .flatMap((page) => page.data.response)
-        .map((post) => (
-          <PostCard key={`postcard-${post.pid}`} post={post} />
+        .flatMap((page) => page.data.data)
+        .map((post, index) => (
+          <PostCard key={`postcard-${index}`} post={post} />
         ))}
       {isFetchingNextPage && <PostCardSkeletons />}
       <div ref={ref}></div>

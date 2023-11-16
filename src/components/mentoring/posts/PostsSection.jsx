@@ -1,18 +1,27 @@
-import { useState, Suspense } from "react";
-import { Link } from "react-router-dom";
+import { useState } from "react";
+import { useNavigate } from "react-router-dom";
 import { useQuery } from "@tanstack/react-query";
-import { ErrorBoundary } from "react-error-boundary";
+import { useAtomValue } from "jotai";
 
-import { getUser } from "../../../apis/mentoring/post";
+import { authAtom } from "../../../store";
+import { getUserInfoReq } from "../../../apis/mentoring/post";
 import { useInputsState } from "../../../hooks/useInputsState";
-import { RoleType } from "../../../constants/user";
+import { userRole, searchCategory } from "../../../constants/mentoring";
 
-import Error from "../../common/Error";
+import Fallback from "../../common/Fallback";
 import PostCardSkeletons from "./PostCardSkeletons";
 import PostList from "./PostList";
+import Button from "../../common/Button";
 
 export default function PostsSection() {
-  const { data } = useQuery({ queryKey: ["user"], queryFn: getUser });
+  const navigate = useNavigate();
+  const auth = useAtomValue(authAtom);
+
+  const { data } = useQuery({
+    queryKey: ["userInfo"],
+    queryFn: getUserInfoReq,
+    enabled: !!auth,
+  });
 
   const [searchValue, setSearchValue] = useState({
     category: "title",
@@ -23,6 +32,10 @@ export default function PostsSection() {
     category: "title",
     search: "",
   });
+
+  const handleWriteClick = () => {
+    navigate("/mentoring/write");
+  };
 
   const handleSerchChange = (e) => {
     const search = e.target.value;
@@ -35,56 +48,54 @@ export default function PostsSection() {
   };
 
   return (
-    <div className="w-[58rem] mx-auto my-16 flex flex-col space-y-5">
-      <div className="flex justify-between items-center">
-        <h1 className="inline-block text-4xl font-bold text-green-700">
-          Mentoring List
-        </h1>
-        {data.data.response.role === RoleType.MENTOR && (
-          <Link
-            className="px-2 py-1 border-2 rounded-lg border-orange text-lg text-orange font-semibold"
-            to="/mentoring/write"
+    <div className="flex justify-center">
+      <div className="w-full max-w-[58rem] m-16 flex flex-col space-y-5">
+        <div className="flex justify-between items-center">
+          <h1 className="inline-block text-4xl font-bold text-green-700">
+            Mentoring List
+          </h1>
+          {(!auth || data.data.data.role === userRole.MENTOR) && (
+            <Button color="white" size="base" onClick={handleWriteClick}>
+              Write
+            </Button>
+          )}
+        </div>
+        <div className="p-2 border-b-2 bg-white flex items-center space-x-2 text-sm">
+          <select
+            className="focus:outline-none"
+            name="category"
+            onChange={handleInputChange}
+            value={inputValue.category}
           >
-            Write
-          </Link>
-        )}
-      </div>
-      <div className="p-2 border-b-2 bg-white flex items-center space-x-2 text-sm">
-        <select
-          className="focus:outline-none"
-          name="category"
-          onChange={handleInputChange}
-          value={inputValue.category}
-        >
-          {["Title", "Writer", "Interest"].map((val) => (
-            <option
-              key={`category-${val.toLowerCase()}`}
-              value={val.toLowerCase()}
-            >
-              {val}
-            </option>
-          ))}
-        </select>
-        <span className="material-symbols-outlined">search</span>
-        <input
-          className="w-full focus:outline-none"
-          name="search"
-          placeholder="Search"
-          onChange={handleSerchChange}
-          onKeyUp={handleSearchEnter}
-          value={inputValue.search}
-        ></input>
-      </div>
-      <Suspense fallback={<PostCardSkeletons />}>
-        <ErrorBoundary
-          fallback={<Error errorMessage="Failed to load mentoring list" />}
+            {Object.values(searchCategory).map((val) => (
+              <option
+                key={`category-${val.toLowerCase()}`}
+                value={val.toLowerCase()}
+              >
+                {val}
+              </option>
+            ))}
+          </select>
+          <span className="material-symbols-outlined">search</span>
+          <input
+            className="w-full focus:outline-none"
+            name="search"
+            placeholder="Search"
+            onChange={handleSerchChange}
+            onKeyUp={handleSearchEnter}
+            value={inputValue.search}
+          ></input>
+        </div>
+        <Fallback
+          Loader={PostCardSkeletons}
+          errorMessage="Failed to load mentoring list"
         >
           <PostList
             category={searchValue.category}
             search={searchValue.search}
           />
-        </ErrorBoundary>
-      </Suspense>
+        </Fallback>
+      </div>
     </div>
   );
 }

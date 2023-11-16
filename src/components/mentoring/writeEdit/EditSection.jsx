@@ -1,9 +1,11 @@
 import { useNavigate, useParams } from "react-router-dom";
 import { useMutation, useQuery } from "@tanstack/react-query";
+import { useAtomValue } from "jotai";
 import toast from "react-hot-toast";
 
+import { uidAtom } from "../../../store";
 import { useInputsState } from "../../../hooks/useInputsState";
-import { editPostReq, getPostReq, getUser } from "../../../apis/mentoring/post";
+import { editPostReq, getPostReq } from "../../../apis/mentoring/post";
 
 import MentorCard from "./MentorCard";
 import Button from "../../common/Button";
@@ -11,19 +13,22 @@ import Button from "../../common/Button";
 export default function EditSection() {
   const navigate = useNavigate();
   const { postId } = useParams();
+  const uid = useAtomValue(uidAtom);
 
   const { data } = useQuery({
     queryKey: ["post", postId],
     queryFn: () => getPostReq(postId),
   });
 
-  const { data: userData } = useQuery({ queryKey: ["user"], queryFn: getUser });
-
-  const { mutate } = useMutation({ mutationFn: editPostReq });
+  const { mutate } = useMutation({
+    mutationFn: (edit) => {
+      return editPostReq(postId, edit);
+    },
+  });
 
   const { inputValue, handleInputChange } = useInputsState({
-    title: data.data.response.title,
-    content: data.data.response.content,
+    title: data.data.data.title,
+    content: data.data.data.content,
   });
 
   const handleTitleChange = (e) => {
@@ -39,17 +44,24 @@ export default function EditSection() {
   };
 
   const handleEditClick = () => {
-    if (userData.data.response.uid !== data.data.response.writer.uid) {
-      toast("You are not the writer.");
+    if (uid !== data.data.data.writerDTO.mentorId) {
+      toast("You are not the writer.", {
+        className: "bg-[#5A906E] text-[#F2F7F5]",
+      });
       navigate(`/mentoring/post/${postId}`);
     } else if (inputValue.title && inputValue.content) {
       mutate(inputValue, {
         onSuccess: () => {
-          toast("Successful edit.");
+          toast("Successful edit.", {
+            className: "bg-[#5A906E] text-[#F2F7F5]",
+          });
           navigate(`/mentoring/post/${postId}`);
         },
       });
-    } else toast("No title or content has been written.");
+    } else
+      toast("No title or content has been written.", {
+        className: "bg-[#5A906E] text-[#F2F7F5]",
+      });
   };
 
   const handleCancelClick = () => {
@@ -61,7 +73,7 @@ export default function EditSection() {
     <div className="flex justify-center">
       <div className="w-full max-w-[58rem] m-12 p-12 bg-white flex flex-col">
         <h1 className="pb-4 text-center font-bold text-green-700">MENTORING</h1>
-        <MentorCard info={data.data.response.writer} />
+        <MentorCard info={data.data.data.writerDTO} />
         <div>
           <input
             name="title"
@@ -83,7 +95,7 @@ export default function EditSection() {
           <Button color="white" size="sm" onClick={handleEditClick}>
             Edit
           </Button>
-          <Button color="orange" size="sm" onClick={handleCancelClick}>
+          <Button color="white" size="sm" onClick={handleCancelClick}>
             Cancel
           </Button>
         </div>

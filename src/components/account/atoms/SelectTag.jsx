@@ -1,8 +1,6 @@
-import { useState } from "react";
 import Autocomplete from "@mui/material/Autocomplete";
 import TextField from "@mui/material/TextField";
 import { CATEGORY } from "../constants/TAGLIST";
-import Title from "./Title";
 import { createTheme, ThemeProvider } from "@mui/material";
 
 const theme = createTheme({
