@@ -48,6 +48,12 @@
 ### 🚀 How to start?
 
 ```
+.env
+```
+VITE_API_URL = backend 서버 주소 
+VITE_TALKPLUS_APP_ID= TALKPLUS ID 
+
+```
 npm install
 npm run dev
 ```
