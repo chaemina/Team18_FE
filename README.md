@@ -34,6 +34,7 @@
 - [Garden 바로가기](https://ke94a9914479ca.user-app.krampoline.com/videos)
 - [Garden Figma](https://www.figma.com/files/team/1281221260603795465)
 - [최종 발표 자료](https://www.figma.com/proto/jSNn1VUwXERkTYLeBjV2vG/Garden-%EC%B5%9C%EC%A2%85-%EB%B0%9C%ED%91%9C?type=design&node-id=329-8399&t=5xGX6I22WIOIYrQM-0&scaling=scale-down&page-id=1%3A2&starting-point-node-id=329%3A8399)
+- [BackEnd Github](https://github.com/Step3-kakao-tech-campus/Team18_BE)
 
 #### 🎨 ERD
 
