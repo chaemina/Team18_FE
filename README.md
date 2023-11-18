@@ -31,7 +31,9 @@
 
 #### 🎈 Instance address
 
-- FE 배포 주소 : https://ke94a9914479ca.user-app.krampoline.com/videos
+- [Garden 바로가기](https://ke94a9914479ca.user-app.krampoline.com/videos)
+- [Garden Figma](https://www.figma.com/files/team/1281221260603795465)
+- [최종 발표 자료](https://www.figma.com/proto/jSNn1VUwXERkTYLeBjV2vG/Garden-%EC%B5%9C%EC%A2%85-%EB%B0%9C%ED%91%9C?type=design&node-id=329-8399&t=5xGX6I22WIOIYrQM-0&scaling=scale-down&page-id=1%3A2&starting-point-node-id=329%3A8399)
 
 #### 🎨 ERD
 
@@ -49,9 +51,9 @@
 
 ```
 .env
-```
 VITE_API_URL = backend 서버 주소 
 VITE_TALKPLUS_APP_ID= TALKPLUS ID 
+```
 
 ```
 npm install
@@ -89,6 +91,8 @@ src="https://img.shields.io/badge/Swiper-6332F6?style=flat-square&logo=swiper&lo
 <img src="https://img.shields.io/badge/Figma-F24E1E?style=flat-square&logo=figma&logoColor=white"/>
 </div>
 <br/>
+
+
 
 ```
 Reason why
